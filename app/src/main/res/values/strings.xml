@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">LoginSampleProject</string>
+    <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">121339368233507</string>
+</resources>
