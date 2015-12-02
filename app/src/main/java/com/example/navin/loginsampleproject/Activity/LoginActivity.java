@@ -40,29 +40,10 @@ public class LoginActivity extends BaseActivity {
 
     private void setupViews() {
         pinterestImage = (ImageView) findViewById(R.id.pintrest_item);
-        facebookImage = (ImageView) findViewById(R.id.facebook_item);
         linkedImage = (ImageView) findViewById(R.id.linkedin_item);
         gmailImage = (ImageView) findViewById(R.id.gmail_item);
         mailIdEdit = (EditText) findViewById(R.id.mail_id);
         passwordEdit = (EditText) findViewById(R.id.password);
-    }
-
-    private void clickView(View v) {
-        int id = v.getId();
-
-        switch (id) {
-            case R.id.fb_button:
-                break;
-
-            case R.id.gmail_item:
-                break;
-
-            case R.id.pintrest_item:
-                break;
-
-            case R.id.linkedin_item:
-                break;
-        }
     }
 
     @Override

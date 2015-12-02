@@ -15,7 +15,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome Here" />
+        android:text="Hello World!" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -43,35 +43,32 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:weightSum="3">
+            android:weightSum="4">
 
             <ImageView
                 android:id="@+id/gmail_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="clickView"
                 android:src="@drawable/ic_g_images" />
 
             <com.facebook.login.widget.LoginButton
-                android:id="@+id/fb_button"
-                android:layout_width="30dp"
+                android:id="@+id/login_button"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:onClick="clickView" />
+                android:layout_weight="1" />
 
             <ImageView
                 android:id="@+id/linkedin_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="clickView"
                 android:src="@drawable/ic_linkin_image" />
 
             <ImageView
                 android:id="@+id/pintrest_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="clickView"
                 android:src="@drawable/ic_pinterest__logo" />
 
         </LinearLayout>
