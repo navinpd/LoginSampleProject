@@ -10,7 +10,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.navin.loginsampleproject.Activity.utils.QLog;
 import com.example.navin.loginsampleproject.R;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 public class LoginActivity extends BaseActivity {
     ImageView pinterestImage;
@@ -19,6 +25,8 @@ public class LoginActivity extends BaseActivity {
     ImageView gmailImage;
     EditText mailIdEdit;
     EditText passwordEdit;
+    LoginButton facebookButton;
+    CallbackManager callbackManager;;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +52,32 @@ public class LoginActivity extends BaseActivity {
         gmailImage = (ImageView) findViewById(R.id.gmail_item);
         mailIdEdit = (EditText) findViewById(R.id.mail_id);
         passwordEdit = (EditText) findViewById(R.id.password);
+        facebookButton = (LoginButton) findViewById(R.id.login_button);
+        callbackManager = CallbackManager.Factory.create();
+
+        facebookButton.setReadPermissions("user_friends");
+        // Other app specific specialization
+
+        // Callback registration
+        facebookButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                QLog.d(loginResult);
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+                QLog.e(exception);
+            }
+        });
+
     }
 
     @Override
