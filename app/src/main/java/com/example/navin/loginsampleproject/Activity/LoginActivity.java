@@ -63,9 +63,14 @@ public class LoginActivity extends BaseActivity {
         mailIdEdit = (EditText) findViewById(R.id.mail_id);
         passwordEdit = (EditText) findViewById(R.id.password);
         facebookButton = (LoginButton) findViewById(R.id.login_button);
-        callbackManager = CallbackManager.Factory.create();
 
-        facebookButton.setReadPermissions("user_friends", "public_profile", "user_friends", "user_about_me","email","user_tagged_places","user_birthday","user_location");
+        inVokeFacebook();
+
+    }
+
+    private void inVokeFacebook() {
+        callbackManager = CallbackManager.Factory.create();
+        facebookButton.setReadPermissions("user_friends", "public_profile", "user_friends", "user_about_me", "email", "user_tagged_places", "user_birthday", "user_location");
         // Other app specific specialization
 
         // Callback registration
@@ -74,7 +79,7 @@ public class LoginActivity extends BaseActivity {
             public void onSuccess(LoginResult loginResult) {
                 // App code
                 QLog.d(loginResult);
-                if(loginResult != null)
+                if (loginResult != null)
                     accessToken = loginResult.getAccessToken();
             }
 
@@ -90,6 +95,7 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        // Check if last logged profile and current is same or different
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(
@@ -102,7 +108,6 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         };
-
     }
 
     private void getFBUserDetails() {
@@ -118,6 +123,7 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
         Bundle parameters = new Bundle();
+        // Field infos. you want to get once user logs in
         parameters.putString("fields", "id,name,link,birthday,locale,age_range,gender,bio,email,location");
         request.setParameters(parameters);
         request.executeAsync();
@@ -134,21 +140,18 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        // CallBackManager to revert you fb details requested
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
