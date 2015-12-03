@@ -1,5 +1,6 @@
 package com.example.navin.loginsampleproject.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,11 +13,18 @@ import android.widget.ImageView;
 
 import com.example.navin.loginsampleproject.Activity.utils.QLog;
 import com.example.navin.loginsampleproject.R;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 public class LoginActivity extends BaseActivity {
     ImageView pinterestImage;
@@ -26,7 +34,9 @@ public class LoginActivity extends BaseActivity {
     EditText mailIdEdit;
     EditText passwordEdit;
     LoginButton facebookButton;
-    CallbackManager callbackManager;;
+    CallbackManager callbackManager;
+    ProfileTracker profileTracker;
+    AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +65,7 @@ public class LoginActivity extends BaseActivity {
         facebookButton = (LoginButton) findViewById(R.id.login_button);
         callbackManager = CallbackManager.Factory.create();
 
-        facebookButton.setReadPermissions("user_friends");
+        facebookButton.setReadPermissions("user_friends", "public_profile", "user_friends", "user_about_me","email","user_tagged_places","user_birthday","user_location");
         // Other app specific specialization
 
         // Callback registration
@@ -64,6 +74,8 @@ public class LoginActivity extends BaseActivity {
             public void onSuccess(LoginResult loginResult) {
                 // App code
                 QLog.d(loginResult);
+                if(loginResult != null)
+                    accessToken = loginResult.getAccessToken();
             }
 
             @Override
@@ -78,13 +90,51 @@ public class LoginActivity extends BaseActivity {
             }
         });
 
+        profileTracker = new ProfileTracker() {
+            @Override
+            protected void onCurrentProfileChanged(
+                    Profile oldProfile,
+                    Profile currentProfile) {
+                if (currentProfile != null) {
+                    getFBUserDetails();
+                    QLog.d(currentProfile.getFirstName());
+                    QLog.d(currentProfile.getName());
+                }
+            }
+        };
+
     }
+
+    private void getFBUserDetails() {
+        GraphRequest request = GraphRequest.newMeRequest(
+                accessToken,
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(
+                            JSONObject object,
+                            GraphResponse response) {
+                        QLog.d(object);
+                        QLog.d(response);
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link,birthday,locale,age_range,gender,bio,email,location");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
